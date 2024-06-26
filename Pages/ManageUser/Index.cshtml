@@ -1,0 +1,111 @@
+﻿@page
+@model WatchShop.Pages.ManageUser.IndexModel
+@{
+}
+
+
+<div class="container">
+    <div class="row mb-5">
+        <a type="button" asp-page="/CURD_Product/index" class="btn btn-lg btn-primary py-5 col">
+            Danh sách sản phẩm
+        </a>
+        <a type="button" asp-page="/CURD_Brand/index" class="btn btn-lg btn-secondary py-5 col mx-2">
+            Danh sách Hãng
+        </a>
+        <a type="button" asp-page="/ListOrder/index" class="btn btn-lg btn-success py-5 col">
+            Danh đơn hàng
+        </a>
+    </div>
+    <table class="table w-100">
+    <form method="get">
+        <div class="row d-flex flex-row align-items-center justify-content-between">
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Role</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="role">
+                        <option  value="">All</option>
+                        <option style="font-weight:500" class="text-primary" value="client">Client</option>
+                        <option style="font-weight:500" class="text-success" value="admin">Admin</option>
+                        <option style="font-weight:500" class="text-warning" value="seller">Seller</option>
+                </select>
+            </div>
+            <div class="input-group col">
+                <div class="input-group-prepend">
+                <span class="input-group-text h-100" id="basic-addon1">Nhập tên</span>
+                </div>
+                <input asp-for="SearchString" type="text" class="form-control" placeholder="Username">
+            </div>
+            <input class="col btn btn-success" type="submit" value="Filter" />
+        </div>
+    </form>
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ListUserModel[0].Id)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ListUserModel[0].UserName)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ListUserModel[0].Roles)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ListUserModel[0].PhoneNumber)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.ListUserModel[0].Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListUserModel)
+        {
+            <tr>
+                <td>
+                    <p class="text-dark">@item.Id</p>
+                </td>
+                <td>
+                    <p>@item.UserName</p>
+                </td>
+                <td>
+                    @foreach (var role in item.Roles)
+                    {
+                        if(role == "admin")
+                        {
+                            <b class="text-success">@role.ToUpper()</b>
+                        }
+                        else if (role == "client")
+                        {
+                                <b class="text-primary">@role.ToUpper()</b>
+                            }
+                            else if (role == "seller")
+                            {
+                                <b class="text-warning">@role.ToUpper()</b>
+                            }
+                        }
+                </td>
+                <td>
+                    @if (item.PhoneNumber != null)
+                    {
+                        <p class="text-dark">@item.PhoneNumber</p>
+                    }
+                    else
+                    {
+                        <p class="text-secondary">Chưa cập nhập</p>
+                    }
+                </td>
+                <td>
+                    <p class="text-primary">@item.Email</p>
+                </td>
+                <td>
+                   <form method="post">
+                            <button asp-route-UserID=@item.Id asp-page-handler="ChangeToAdmin" type="submit" class="btn btn-success" style="font-size:16px">Set Admin</button> |
+                            <button asp-route-UserID=@item.Id asp-page-handler="ChangeToSeller" type="submit" class="btn btn-warning text-white" style="font-size:16px">Set Seller</button> |
+                            <button asp-route-UserID=@item.Id asp-page-handler="ChangeToClient" type="submit" class="btn btn-primary" style="font-size:16px">Set Client</button> 
+                        
+                   </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

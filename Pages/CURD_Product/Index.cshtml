@@ -1,0 +1,99 @@
+﻿@page "{CurrentPage?}"
+@using System.Globalization
+@model WatchShop.Pages.CURD_Product.IndexModel
+
+@{
+    ViewData["Title"] = "Danh Sách Sản Phẩm";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="py-4">
+    <div class="">
+        <h1>Danh Sách Sản Phẩm: <a class="btn btn-primary " asp-page="Create">+ Create New</a></h1>
+    </div>
+    <table class="table w-100">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].Pic1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].sale)
+                </th>
+                @* <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].Brand)
+                </th> *@
+                @* <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].GlassType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].MachineType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].WireMaterial)
+                </th> *@
+                <th>
+                    @Html.DisplayNameFor(model => model.Watch[0].Stocking)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Watch)
+            {
+                <tr>
+                    <td>
+                         @* @Html.DisplayFor(modelItem => item.Pic1) *@
+                        <img style="width:100px;height:100px" src="@item.Pic1" />
+                    </td>
+                    <td>
+                        <span class="m-auto"> @Html.DisplayFor(modelItem => item.Name)</span>
+                    </td>
+                    <td class="d-flex flex-column justify-content-center align-items-center">
+                        <span class="text-danger my-3">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", item.PriceAfterSale)đ</span>
+                        <del class="fs-sm text-primary" style="font-style:italic">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", item.Price)đ</del>
+                    </td>
+                    <td>
+                        <p class="text-primary">-@item.sale%</p>
+                    </td>
+                    @* <td>
+                        <p>@Html.DisplayFor(modelItem => item.Brand)</p>
+                    </td> *@
+                    @* <td>
+                        <p>@Html.DisplayFor(modelItem => item.GlassType)</p>
+                    </td>
+                    <td>
+                        <p>@Html.DisplayFor(modelItem => item.MachineType)</p>
+                    </td>
+                    <td>
+                        <p>@Html.DisplayFor(modelItem => item.WireMaterial)</p>
+                    </td> *@
+                    <td>
+                        <p>@Html.DisplayFor(modelItem => item.Stocking)</p>
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary" style="font-size:10px">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-success" style="font-size:10px">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger" style="font-size:10px">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+ <style>
+     tr td{
+        text-align: center;
+        vertical-align: middle;
+     }
+
+     th{
+         text-align:center;
+     }
+ </style>

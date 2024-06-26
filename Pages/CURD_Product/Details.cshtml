@@ -1,0 +1,81 @@
+﻿@page
+@using System.Globalization
+@model WatchShop.Pages.CURD_Product.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+
+<div class="d-flex flex-row justify-content-between align-items-center mb-2">
+    <div>
+        <a asp-page="Index"> <-- Back to List</a>
+    </div>
+    <h3>Chi Tiết Đồng Hồ</h3>
+</div>
+<div class="container row">
+    <div class="col-5">
+        <dl class="row">
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.Name)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                @Html.DisplayFor(model => model.Watch.Name)
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.Price)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                <span class="text-danger my-3">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", Model.Watch.PriceAfterSale)đ</span>
+                <del class="fs-sm text-primary" style="font-style:italic">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", Model.Watch.Price)đ</del>
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.sale)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                <p class="text-primary">-@Model.Watch.sale%</p>
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.Brand)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                <img src="@Model.Brand.LogoUrl" />
+                <p>
+                    @Model.Brand.Description
+                </p>
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.GlassType)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                @Html.DisplayFor(model => model.Watch.GlassType)
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.MachineType)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                @Html.DisplayFor(model => model.Watch.MachineType)
+            </dd>
+            <dt class="col-3 mb-2">
+                @Html.DisplayNameFor(model => model.Watch.WireMaterial)
+            </dt>
+            <dd class="col-sm-10 mb-4">
+                @Html.DisplayFor(model => model.Watch.WireMaterial)
+            </dd>
+        </dl>
+    </div>
+    <ul class="razor-slider col-5">
+        <li><img width="500px" height="200px" src="@Model.Watch.Pic1" alt="1.jpg" /></li>
+        <li><img width="500px" height="200px" src="@Model.Watch.Pic2" alt="2.jpg" /></li>
+        <li><img width="500px" height="200px" src="@Model.Watch.Pic3" alt="3.jpg" /></li>
+        <li><img width="500px" height="200px" src="@Model.Watch.Pic4" alt="4.jpg" /></li>
+    </ul>
+</div>
+
+
+<style>
+    dt,dd{
+        margin:10px 0 10 px 0;
+    }
+</style>

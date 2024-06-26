@@ -1,0 +1,171 @@
+﻿@page
+@using System.Globalization
+@model WatchShop.Pages.Payment.IndexModel
+@{
+    var currentuser = await Model.GetCurrentUserAsync();
+}
+<div class="row">
+    <div class="col-75">
+        <div class="containerasdasd">
+            <form name="PaymnentForm" method="post" onsubmit="return validateForm()">
+                <div class="row">
+                        <div class="col-50">
+                            <h3>Billing Address</h3>
+                            <fieldset disabled>
+                                <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                                <input id="disabledTextInput" class="form-control" type="text" id="fname" name="firstname" value="@currentuser.Name" placeholder="John M. Doe">
+                                <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                                <input id="disabledTextInput" class="form-control" type="text" id="email" name="email" value="@currentuser.Email" placeholder="john@example.com">
+                            </fieldset>
+                            
+                            <label for="city"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                            <input asp-for="OrderInput.PhoneNumber" type="text" id="city" name="PhoneNumber" placeholder="Phone Number">
+                            <span asp-validation-for="OrderInput.PhoneNumber" class="text-danger"></span>
+                           
+                            <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                            <input asp-for="OrderInput.Address" type="text" id="adr" name="address" placeholder="542 W. 15th Street">
+                            <span asp-validation-for="OrderInput.Address" class="text-danger"></span>
+                            
+                            <label  for="city"><i class="fa fa-institution"></i> City</label>
+                            <input asp-for="OrderInput.City" type="text" id="city" name="City" placeholder="New York">
+                            <span asp-validation-for="OrderInput.City" class="text-danger"></span>
+                        </div>
+                </div>
+                <button asp-page-handler="Pay" type="submit" class="btn btn-success">Order</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-25">
+        <div class="container">
+            <h4>
+                Cart
+                <span class="price" style="color:black">
+                    <i class="fa fa-shopping-cart"></i>
+                    <b>@Model.CurrentCarts.Count()</b>
+                </span>
+            </h4>
+            @if ( Model.CurrentCarts != null)
+            {
+                double TotalAllItem = 0;
+                @foreach (Cart order in Model.CurrentCarts)
+                {   
+                    var BillName = order.Watch.Name + " x" + order.Quantity;
+                    double TotalaItemPrice = order.Watch.PriceAfterSale * order.Quantity;
+                    TotalAllItem += TotalaItemPrice;
+                    <p><a asp-route-ProductID=@order.Watch.Id asp-page="/ProductDetail/index">@BillName</a> <span class="price">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalaItemPrice)đ</span></p>
+                }
+                <hr>
+                <p>Total <span class="price" style="color:black"><b><span class="price">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalAllItem)đ</span></b></span></p>
+            }
+        </div>
+    </div>
+    
+</div>
+
+
+<script>
+
+
+    function isVietnamesePhoneNumber(number) {
+        return /((^(\+84|84|0|0084){1})(3|5|7|8|9))+([0-9]{8})$/.test(number);
+    }
+    function validateForm() {
+        var PhoneNumberinput = document.forms["PaymnentForm"]["PhoneNumber"].value;
+        var address = document.forms["PaymnentForm"]["address"].value;
+        var cityInput = document.forms["PaymnentForm"]["City"].value;
+        
+        if (!isVietnamesePhoneNumber(PhoneNumberinput)) {
+            alert("Phone Number is invaild");
+            return false;
+        }
+        if (address === "") {
+            alert("Please fill Address");
+            return false;
+        }
+        if (cityInput === "") {
+            alert("Please fill City");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<style>
+    .row {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        -ms-flex-wrap: wrap; /* IE10 */
+        flex-wrap: wrap;
+        margin: 0 -16px;
+    }
+
+    .col-25 {
+        -ms-flex: 25%; /* IE10 */
+        flex: 25%;
+    }
+
+    .col-50 {
+        -ms-flex: 50%; /* IE10 */
+        flex: 50%;
+    }
+
+    .col-75 {
+        -ms-flex: 36%; /* IE10 */
+        flex: 36%;
+    }
+
+    .col-25,
+    .col-50,
+    .col-75 {
+        padding: 0 16px;
+    }
+
+    .containerasdasd {
+        padding: 5px 20px 15px 20px;
+        border-radius: 3px;
+    }
+
+    input[type=text] {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    label {
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .icon-container {
+        margin-bottom: 20px;
+        padding: 7px 0;
+        font-size: 24px;
+    }
+
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    span.price {
+        float: right;
+        color: grey;
+    }
+
+    /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+    media (max-width: 800px) {
+        .row
+
+    {
+        flex-direction: column-reverse;
+    }
+
+    .col-25 {
+        margin-bottom: 20px;
+    }
+
+    }
+</style>

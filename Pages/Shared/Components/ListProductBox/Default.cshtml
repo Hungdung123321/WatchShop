@@ -1,0 +1,9 @@
+﻿@using WatchShop.Models;
+@model List<Watch>
+
+<div class="row">
+    @foreach (var watch in Model)
+    {
+        @await Html.PartialAsync("_ProductCard", watch)
+    }
+</div>

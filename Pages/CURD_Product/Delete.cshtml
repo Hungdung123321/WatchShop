@@ -1,0 +1,65 @@
+﻿@page
+@model WatchShop.Pages.CURD_Product.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Watch</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.sale)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.sale)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.Brand)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.Brand)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.GlassType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.GlassType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.MachineType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.MachineType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Watch.WireMaterial)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Watch.WireMaterial)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Watch.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

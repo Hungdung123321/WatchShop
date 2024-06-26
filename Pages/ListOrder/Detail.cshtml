@@ -1,0 +1,101 @@
+﻿@page
+@using System.Globalization
+@model WatchShop.Pages.ListOrder.DetailModel
+@{
+    double TotalAllItem = 0;
+}
+
+<div class="container">
+    <table class="table caption-top">
+        <caption class="mb-3"> 
+            <h5 class="mb-2 text-black">User Name : @Model.CurrentOrders[0].User.Name</h5>
+            <p style="font-style:italic" class="text-muted mb-4"><b class="text-black">Order ID :</b> @Model.CurrentOrders[0].OrderKey ------------- <b class="text-black">Created Date :</b> @Model.CurrentOrders[0].CreatedDate</p>
+            @switch (Model.CurrentOrders[0].Status)
+            {
+                case OrderStatus.Pending:
+                    <span style="width:50px" class="bg-warning text-white p-2 rounded-pill d-inline">@Model.CurrentOrders[0].Status</span>
+                    break;
+                case OrderStatus.Delivering:
+                    <span style="width:50px" class="bg-primary text-white p-2 rounded-pill d-inline">@Model.CurrentOrders[0].Status</span>
+                    break;
+                case OrderStatus.Completed:
+                    <span style="width:50px" class="bg-success text-white p-2 rounded-pill d-inline">@Model.CurrentOrders[0].Status</span>
+                    break;
+                case OrderStatus.Cancelled:
+                    <span style="width:50px" class="bg-danger text-white p-2 rounded-pill d-inline">@Model.CurrentOrders[0].Status</span>
+                    break;
+            }
+        </caption>
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Watch ID</th>
+                <th scope="col">Watch</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.CurrentOrders)
+            {
+                if (order.watch != null)
+                {
+                    var BillName = order.watch.Name + "  x" + order.Qty;
+                    double TotalaItemPrice = order.watch.PriceAfterSale * (int)order.Qty;
+                    TotalAllItem += TotalaItemPrice;
+
+                    <tr>
+                        <th scope="row">@order.watch.Id</th>
+                        <td><a asp-route-ProductID=@order.watch.Id asp-page="/ProductDetail/index">@BillName</a></td>
+                        <td>@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalaItemPrice)đ</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th scope="row">loi</th>
+                        <td>asdsa</td>
+                        <td>cvcxv</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+        <tfoot class="border-top border-dark">
+            <tr>
+                <th scope="row"></th>
+                <td>
+                    <h5 style="text-align:end">Total Price:</h5>
+                </td>
+                <td>@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalAllItem)đ</td>
+            </tr>
+            <tr>
+                <th scope="row"><a asp-page="./index" type="button" class="btn btn-secondary"><-- Back</a></th>
+                <td>
+                    
+                </td>
+                 <td>
+                    @if(Model.CurrentOrders[0].Status == OrderStatus.Pending){
+                        <form method="post">
+                            <button asp-page-handler="CancelOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-danger ">Cancel Order</button>
+                            <button asp-page-handler="ApproveOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-primary">Approve Order</button>
+                            <button asp-page-handler="PendingOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-warning text-white">Pending Order</button>
+                        </form>
+                    }
+                    else if (Model.CurrentOrders[0].Status == OrderStatus.Delivering)
+                    {
+                        <form method="post">
+                            <button asp-page-handler="CancelOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-danger ">Cancel Order</button>
+                            <button asp-page-handler="CompleteOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-success">Complete Order</button>
+                            <button asp-page-handler="PendingOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="btn btn-warning text-white">Pending Order</button>
+                        </form>
+                    }
+                    else if (Model.CurrentOrders[0].Status == OrderStatus.Cancelled || Model.CurrentOrders[0].Status == OrderStatus.Completed)
+                    {
+                        <button asp-page-handler="CancelOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="disabled btn btn-danger ">Cancel Order</button>
+                        <button asp-page-handler="ApproveOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="disabled btn btn-primary">Approve Order</button>
+                        <button asp-page-handler="PendingOrder" asp-route-orderId="@Model.CurrentOrders[0].OrderKey.ToString()" type="submit" class="disabled btn btn-warning text-white">Pending Order</button>
+                    }
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

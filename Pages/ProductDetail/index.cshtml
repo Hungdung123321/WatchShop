@@ -1,0 +1,125 @@
+﻿@page 
+@using System.Globalization
+@using WatchShop.Models
+@using WatchShop.Areas.Identity
+@using Microsoft.AspNetCore.Identity
+@model WatchShop.Pages.ProductDetail.indexModel
+@{
+    
+}
+<div class="container">
+    <div class="d-flex flex-row bd-highlight">
+        <h4 >@Model.Watch.Name</h4>
+        @if (Model.Watch.Stocking > 0)
+        {
+            <span class="p-2 rounded bg-success text-white mx-2">Stocking</span>
+        }
+        else
+        {
+            <span class="p-2 rounded bg-danger text-white mx-2">out of stock</span>
+        }
+    </div>
+    <div class="d-flex flex-row mt-5 justify-content-between">
+        <div class="rounded">
+            <ul class="razor-slider">
+                <li><img width="500px" height="200px" src="@Model.Watch.Pic1" alt="1.jpg"/></li>
+                <li><img width="500px" height="200px" src="@Model.Watch.Pic2" alt="2.jpg" /></li>
+                <li><img width="500px" height="200px" src="@Model.Watch.Pic3" alt="3.jpg" /></li>
+                <li><img width="500px" height="200px" src="@Model.Watch.Pic4" alt="3.jpg" /></li>
+            </ul>
+            <img width="150px" height="47" src="@Model.Brand.LogoUrl"/>
+            <ul style="list-style: disc;">
+               <li class="w-75" style="font-size:18px">
+                   @Model.Brand.Description
+               </li>
+            </ul>
+        </div>
+        <div class="w-100 mx-5">
+            <div class="d-flex flex-row align-items-center">
+                <h4 class="text-danger">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @Model.Watch.PriceAfterSale)đ</h4>
+                <del class="fs-sm text-muted mx-2">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @Model.Watch.Price)đ</del>
+                <span class="p-1 rounded text-danger" style="background-color: #f9e9e2;font-style:italic">-@Model.Watch.sale%</span>
+            </div>
+            <p>Chính hãng từ: <b>@Model.Brand.Name</b> - tại: <b>@Model.Brand.Origin</b></p>
+            <form method="post">
+                <div class="d-flex flex-row justify-content-between align-items-center my-4">
+                    @if(Model.Watch.Stocking > 0){
+                        <button asp-route-productId="@Model.ProductID" asp-page-handler="AddToCart1" type="submit" class="btn btn-success">
+                            <b style="font-size: 14px;">Order now - Free shop</b>
+                            <p style="font-size: 12px;font-weight: 300;">Check the goods before payment</p>
+                        </button>
+                        <button class="btn text-success bg-white border border-success" value="Add to Cart" type="submit" asp-route-productId="@Model.ProductID" asp-page-handler="AddToCart2">
+                            <b style="font-size: 14px;"><i class="fa-solid fa-cart-shopping"></i> Add to cart</b>
+                            <p style="font-size: 12px;font-weight: 300;">Check the goods before payment</p>
+                        </button>
+                    }
+                    else
+                    {
+                        <button asp-route-productId="@Model.ProductID" asp-page-handler="AddToCart1" type="submit" class="disabled btn btn-success">
+                            <b style="font-size: 14px;">Order now - Free shop</b>
+                            <p style="font-size: 12px;font-weight: 300;">Check the goods before payment</p>
+                        </button>
+                        <button class="disabled btn text-success bg-white border border-success" value="Add to Cart" type="submit" asp-route-productId="@Model.ProductID" asp-page-handler="AddToCart2">
+                            <b style="font-size: 14px;"><i class="fa-solid fa-cart-shopping"></i> Add to cart</b>
+                            <p style="font-size: 12px;font-weight: 300;">Check the goods before payment</p>
+                        </button>
+                    }
+                </div>
+            </form>
+            <b>Information @Model.Watch.Name</b>
+            <div class="table-responsive mt-4">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Hãng</p></th>
+                            <td class="text-primary">
+                                <a asp-route-BrandId=@Model.Brand.BrandId
+                                   asp-route-GlassType=""
+                                   asp-route-MachineType=""
+                                   asp-route-WireMaterial=""
+                                   asp-route-WaterResistant=""
+                                   asp-route-FaceSize=""
+                                   asp-route-Gender=""
+                                   asp-route-PriceRange=0
+                                   asp-page="/ListProduct/index" class="text-decoration-underline">@Model.Brand.Name</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Xuất xứ</p></th>
+                            <td >@Model.Brand.Origin</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Loại máy</p></th>
+                            <td>@Html.DisplayFor(Model => Model.Watch.MachineType)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Chất liệu kính</p></th>
+                            <td>@Html.DisplayFor(Model => Model.Watch.GlassType)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Chất liệu dây</p></th>
+                            <td>@Html.DisplayFor(Model => Model.Watch.WireMaterial)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Độ kháng nước</p></th>
+                            <td>@Html.DisplayFor(Model => Model.Watch.WaterResistant)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Size mặt</p></th>
+                            <td>@Html.DisplayFor(Model => Model.Watch.FaceSize)</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><p style="font-weight: 700;">Giới tính</p></th>
+                            @if (Model.Watch.Gender == "Nam")
+                            {
+                                <td>Nam</td>
+                            }else{
+                                <td>Nữ</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div> 

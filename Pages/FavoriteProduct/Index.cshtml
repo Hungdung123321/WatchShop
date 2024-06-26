@@ -1,0 +1,45 @@
+﻿@page
+@using System.Globalization
+@model WatchShop.Pages.FavoriteProduct.IndexModel
+@{
+}
+
+<h1>Sản phẩm yêu thích</h1>
+
+@if (Model.Favorites != null)
+{
+    foreach (Favorite item in Model.Favorites)
+    {
+        @if (item.Watch != null && item.Watch.Brand != null)
+        {
+            <form method="post">
+                <tr>
+                    <th scope="row">
+                        <div class="d-flex align-items-center">
+                            <img src="@item.Watch.Pic1" class="img-fluid rounded-3"
+                                 style="width: 120px;" alt="Book">
+                            <div class="flex-column ms-4">
+                                <a asp-route-ProductID=@item.Watch.Id asp-page="/ProductDetail/index" class="mb-2 text-black">@item.Watch.Name </a>
+                                <p class="mb-0 text-black" style="font-weight: 400;font-style: italic;">@item.Watch.Brand.Name</p>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="align-middle">
+                    </td>
+                    <td class="align-middle text-center">
+                        
+                    </td>
+                    <td class="align-middle text-center">
+                        <button class="btn btn-danger" asp-route-productId="@item.WatchId" asp-page-handler="RemoveToFavorite"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            </form>
+        }
+    }
+}
+else
+{
+    <div class="text-center">
+        <p style="font-size:32px"><i class="fa-solid fa-cart-plus"></i> Cart is Empty</p>
+    </div>
+}

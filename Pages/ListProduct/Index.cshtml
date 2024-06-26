@@ -1,0 +1,118 @@
+﻿@page
+@using WatchShop.Enums;
+@using WatchShop.Utils;
+@using System.Globalization
+@model WatchShop.Pages.ListProduct.IndexModel
+@{
+   
+}
+
+<div class="container">
+    <form>
+        <div class="row d-flex flex-row">
+            <div class="input-group mb-3 col">
+                <span class="input-group-text " id="basic-addon1">Tên đồng hồ</span>
+                <input type="text" class="form-control" asp-for="SearchString" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Hãng</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="BrandId" asp-items="@Model.BrandNameSL">
+                    <option value=-1 selected>Choose...</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Kính</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="GlassType" asp-items="@Model.GlassTypeSL">
+                    <option value="" selected>Choose...</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Máy</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="MachineType" asp-items="@Model.MachineTypeSL">
+                    <option value="" selected>Choose...</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Dây</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="WireMaterial" asp-items="@Model.WireMaterialSL">
+                    <option value="" selected>Choose...</option>
+                </select>
+            </div>
+        </div>
+        <div class="row d-flex flex-row">
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Kháng nước</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="WaterResistant" asp-items="@Model.WaterResistantSL">
+                    <option value="" selected>Choose...</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Size mặt</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="FaceSize" asp-items="@Model.FaceSizeSL">
+                    <option value="" selected>Choose...</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Giới tính</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="Gender">
+                    <option value="" selected>Choose...</option>
+                    <option value="Nam" >Nam</option>
+                    <option value="Nu" >Nữ</option>
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <label class="input-group-text" for="inputGroupSelect01">Mức Giá</label>
+                <select class="form-select" id="inputGroupSelect01" asp-for="PriceRange" asp-items="Html.GetEnumSelectList<PriceRange>()">
+                </select>
+            </div>
+            <div class="input-group mb-3 col">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        @if (Model.Watchs != null)
+        {
+            @foreach (Watch watch in Model.Watchs)
+            {
+                <div class="col-6 col-lg-3 my-3">
+                    <div class="product-card-10">
+                        <div class="product-card-image">
+                            <div class="badge-ribbon"><span class="badge bg-danger" style="font-style:italic">-@watch.sale%</span></div>
+                            <div class="product-media"><a asp-route-ProductID=@watch.Id asp-page="/ProductDetail/index"><img class="img-fluid" src="@watch.Pic1" title="" alt=""></a></div>
+                        </div>
+                        <div class="product-card-info">
+                            <div class="rating-star text"><i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star"></i></div>
+                            <h6 class="product-title"><a href="#">@watch.Name</a></h6>
+                            <div class="product-price"><span class="text-danger">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @watch.PriceAfterSale)đ</span> <del class="fs-sm text-muted">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @watch.Price)đ</del></div>
+                            <form method="post">
+                                <div class="product-action">
+                                    @if (Model.currentUser != null)
+                                    {
+                                        <button asp-route-productId="@watch.Id" asp-page-handler="AddToFavorite" style="border:none">
+                                            <a value="" type="submit" class="btn @(Model.FavoriteExists(Model.currentUser.Id,watch.Id) ? "bg-primary text-white" : " ")"><i class="fa fa-heart"></i> </a>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button asp-route-productId="@watch.Id" asp-page-handler="AddToFavorite" style="border:none">
+                                            <a value="" type="submit" class="btn"><i class="fa fa-heart"></i> </a>
+                                        </button>
+                                    }
+                                    <a asp-route-productId="@watch.Id" asp-page="/ProductDetail/index" class="btn"><i class="fa fa-eye"></i> </a>
+                                    <button asp-route-productId="@watch.Id" asp-page-handler="AddToCart" style="border:none">
+                                        <a value="" type="submit" class="btn"><i class="fa fa-shopping-cart"></i></a>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+   
+</div>
+
+
+

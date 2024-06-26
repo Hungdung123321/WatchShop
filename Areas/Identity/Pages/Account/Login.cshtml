@@ -1,0 +1,97 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="row">
+    <div class="col-md-4 m-auto">
+        <section>
+            <div id="logreg-forms">
+                <form id="account" method="post" class="form-signin" asp-route-returnUrl="@Model.ReturnUrl">
+                    <h2 class="text-center">Sign in</h2>
+                    <hr />
+                    <div class="social-login">
+                        <button class="btn facebook-btn social-btn" type="button"><span><i class="fab fa-facebook-f"></i> Sign in with Facebook</span> </button>
+                        <button class="btn google-btn social-btn g-signin2" data-onsuccess="onSignIn" type="button"><span><i class="fab fa-google-plus-g"></i> Sign in with Google+</span> </button>
+                    </div>
+                    <p style="text-align:center"> OR  </p>
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-1">
+                        <input id="inputEmail" asp-for="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" />
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="inputPassword" asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.Password" class="form-label">Password</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="checkbox mb-3">
+                        <label asp-for="Input.RememberMe" class="form-label">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                    <div class="mb-2">
+                        <button id="login-submit" type="submit" class="w-100 btn btn-success btn-block"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+                    </div>
+                    <div>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="color:white" class="btn btn-primary"><i class="fas fa-user-plus"></i> Sign up New Account</a>
+                        </p>
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        @* <p>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        </p> *@
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    @* <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to log in.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div> *@
+</div>
+<script src="https://apis.google.com/js/platform.js" asp-append-version="true" async defer></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+    </script>
+}

@@ -1,0 +1,24 @@
+﻿@using WatchShop.Models;
+@using System.Globalization
+@model Watch
+
+<div class="col-6 col-lg-3 my-3">
+    <div class="product-card-10">
+        <div class="product-card-image">
+            <div class="badge-ribbon"><span class="badge bg-danger" style="font-style:italic">-@Model.sale%</span></div>
+            <div class="product-media"><a asp-route-ProductID=@Model.Id asp-page="/ProductDetail/index"><img class="img-fluid" src="@Model.Pic1" title="" alt=""></a></div>
+        </div>
+        <div class="product-card-info">
+            <div class="rating-star text"><i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star-fill active"></i> <i class="bi bi-star"></i></div>
+            <h6 class="product-title"><a href="#">@Model.Name</a></h6>
+            <div class="product-price"><span class="text-danger">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @Model.PriceAfterSale)đ</span> <del class="fs-sm text-muted">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", @Model.Price)đ</del></div>
+            <form method="post">
+                <div class="product-action">
+                    <a class="btn"><i class="fa fa-heart"></i> </a>
+                    <a class="btn"><i class="fa fa-eye"></i> </a>
+                    <a value="" type="submit" class="btn btn-success"><i class="fa fa-shopping-cart"></i></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

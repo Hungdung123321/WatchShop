@@ -1,0 +1,159 @@
+﻿@page 
+@model WatchShop.Pages.profiles.IndexModel
+@using System.Globalization
+@{
+    
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h1>Trang cá nhân</h1>
+            <image class=""  src="https://fileapi.surego.vn/Upload/VietNam/CaMau/Hotel/Picture/R637471652204998962.png" id="image0_2_85" width="200" height="200"> </image>
+        </div>
+        <div class="col-sm-8">
+            <img src="https://static.vecteezy.com/system/resources/previews/044/525/205/non_2x/ai-generated-antique-pocket-watch-on-white-background-generative-ai-photo.jpeg" width="100%" height="300px" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            
+            <!--/Thong tin nguoi dung-->
+            <ul class="list-group">
+                
+                <li class="list-group-item text-muted">Profilo</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span>   @Model.appUser.Name </li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @User.Identity.Name</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Phone Number</strong></span> @Model.appUser.PhoneNumber</li>
+
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item text-right row d-flex flex-row">
+                    <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Manage/Index"> Chỉnh sửa</a>
+                      @* <button class="btn btn-success col mx-2"> <a class="text-white" asp-page="/ManageUser/index" > Quản lý người dùng (Admin)</a></button> *@
+                </li>
+            </ul>
+
+
+        </div><!--/Lich su mua hang-->
+        <div class="col-sm-9">
+            <ul class="nav nav-tabs mb-4" id="myTab">
+                <li>
+                    <div class="input-group mb-3 col">
+                        <label class="input-group-text" style="font-weight:500" for="inputGroupSelect01">Status:</label>
+                        <form>
+                            <select asp-for="Status" onchange="this.form.submit()" class="form-select" id="inputGroupSelect01">
+                                <option style="font-weight:500" class="text-warning" value="@OrderStatus.Pending" selected>đang chờ duyệt</option>
+                                <option style="font-weight:500" class="text-primary" value="@OrderStatus.Delivering">đang được giao</option>
+                                <option style="font-weight:500" class="text-success" value="@OrderStatus.Completed">đã hoàn thành</option>
+                                <option style="font-weight:500" class="text-danger" value="@OrderStatus.Cancelled">Đơn hàng đã hủy</option>
+                            </select>
+                        </form>
+                    </div>
+                </li>
+                <li class="active mx-auto"><h2>Đơn Hàng</h2></li>
+            </ul>
+            <div class="scroll ">
+                <ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home">
+                            <div class="">
+                                @foreach (var order in Model.CurentOrdersByUserId)
+                                {
+                                    double TotalAllItem = 0;
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <h4>Mã đơn Hàng: <span class="fst-italic text-secondary" style="font-size:16px">@order.OrderKey</span></h4>
+                                            @switch (order.Status)
+                                            {
+                                                case OrderStatus.Pending:
+                                                    <span class="bg-warning text-white p-2 rounded-pill d-inline">Đơn hàng đang chờ duyệt</span>
+                                                    break;
+                                                case OrderStatus.Delivering:
+                                                    <span class="bg-primary text-white p-2 rounded-pill d-inline">Đơn hàng đang được giao</span>
+                                                    break;
+                                                case OrderStatus.Completed:
+                                                    <span class="bg-success text-white p-2 rounded-pill d-inline">Đơn hàng Đã Hoàn thành</span>
+                                                    break;
+                                                case OrderStatus.Cancelled:
+                                                    <span class="bg-danger text-white p-2 rounded-pill d-inline">Đơn hàng đã hủy</span>
+                                                    break;
+                                            }
+                                        </div>
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>Ảnh</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Hãng</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="items">
+                                                @foreach (var order2 in Model.GetOrderWatchsById(order.OrderKey))
+                                                {
+                                                    if (order2.watch != null)
+                                                    {
+                                                        var watchname = order2.watch.Name + " x" + order2.Qty;
+                                                        double TotalaItemPrice = order2.watch.Price * order2.Qty;
+                                                        TotalAllItem = TotalAllItem + TotalaItemPrice;
+                                                        <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle ">
+
+                                                            <td>
+                                                                <img width="100px" height="100px" src="@order2.watch.Pic1" />
+                                                            </td>
+                                                            <td>
+                                                                <a asp-route-ProductID=@order2.watch.Id asp-page="/ProductDetail/index">@watchname</a>
+                                                            </td>
+                                                            <td>
+                                                                <a>@order2.watch.Brand.Name</a>
+                                                            </td>
+                                                            <td>
+                                                                <a>@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalaItemPrice)đ</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>error</p>
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot class="border-top border-dark">
+                                                <tr>
+                                                    <th scope="row">Đặt ngày:<span style="font-style:italic;font-size:16px;font-weight:500" class="text-secondary">  @order.CreatedDate</span><th />
+                                                    <td>
+                                                        <h5 style="text-align:end" class="text-danger">Total Price:</h5>
+                                                    </td>
+                                                    <td style="font-size:20px;font-weight:500">@string.Format(new CultureInfo("vi-VN"), "{0:#,##}", TotalAllItem)đ</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div><!--/col-9-->
+</div><!--/row-->
+
+<script>
+    function submitform()
+    {
+      $('form').submit();
+    }
+</script>
+
+<style>
+    tr td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>

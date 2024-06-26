@@ -1,0 +1,275 @@
+﻿@page
+@using WatchShop.Enums
+@model WatchShop.Pages.CURD_Product.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+
+<h3>Chỉnh sửa đồng hồ</h3>
+<div class="row">
+    <div class="w-75 mx-auto">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h4 class="text-center mb-3">Thông tin đồng hồ</h4>
+            <input type="hidden" asp-for="Watch.Id" />
+            <div class="form-floating mb-3 row">
+                <div class="form-floating mb-2 col">
+                    <input asp-for="Watch.Name" class="form-control" id="floatingName" placeholder="">
+                    <label asp-for="Watch.Name" class="ms-3"></label>
+                    <span asp-validation-for="Watch.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-2 col">
+                    <input asp-for="Watch.Price" type="number" class="form-control" id="floatingPrice" placeholder="">
+                    <label asp-for="Watch.Price" class="ms-3" for="floatingPrice"></label>
+                    <span asp-validation-for="Watch.Price" class="text-danger"></span>
+                </div>
+                <div class="form-floating col">
+                    <input asp-for="Watch.sale" type="number" class="form-control" id="floatingSale" placeholder="">
+                    <label asp-for="Watch.sale" class="ms-3"></label>
+                    <span asp-validation-for="Watch.sale" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group col">
+                    <label asp-for="Watch.Brand" class="control-label"></label>
+                    <select class="form-select" asp-for="Watch.BrandId" asp-items="@Model.BrandNameSL">
+                        <option value=0>-- Select Brand --</option>
+                    </select>
+                    <span asp-validation-for="Watch.BrandId" class="text-danger"></span>
+                </div>
+                <div class="col">
+                    <div class="col">
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group col-6">
+                    <a asp-page="/CURD_Brand/Create" class="btn btn-primary">+ Thêm Hãng</a>
+                </div>
+                <div class="form-group col-6">
+                </div>
+            </div>
+            <h4 class="text-center mb-3">Ảnh</h4>
+            <div class="row">
+                <div class="form-group col">
+                    <label asp-for="Watch.Pic1" class="custom-file-label mb-2">Image Url 1:</label>
+                    <input asp-for="Watch.Pic1" type="url" class="form-control custom-file-input" />
+                    <span asp-validation-for="Watch.Pic1" class="text-danger"></span>
+                </div>
+                <div class="form-group col">
+                    <label asp-for="Watch.Pic2" class="custom-file-label mb-2">Image Url 2:</label>
+                    <input asp-for="Watch.Pic2" type="url" class="form-control custom-file-input" />
+                    <span asp-validation-for="Watch.Pic2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="form-group col">
+                    <label asp-for="Watch.Pic3" class="custom-file-label mb-2">Image Url 3:</label>
+                    <input asp-for="Watch.Pic3" type="url" class="form-control custom-file-input" />
+                    <span asp-validation-for="Watch.Pic3" class="text-danger"></span>
+                </div>
+                <div class="form-group col">
+                    <label asp-for="Watch.Pic4" class="custom-file-label mb-2">Image Url 4:</label>
+                    <input asp-for="Watch.Pic4" type="url" class="form-control custom-file-input" />
+                    <span asp-validation-for="Watch.Pic4" class="text-danger"></span>
+                </div>
+            </div>
+            <h4 class="text-center my-3">Thông số đồng hồ</h4>
+            <div class="row">
+                <div class="form-floating mt-3 col">
+                    <input asp-for="Watch.Stocking" type="number" class="form-control" id="floatingSale" placeholder="">
+                    <label asp-for="Watch.Stocking"></label>
+                    <span asp-validation-for="Watch.Stocking" class="text-danger"></span>
+                </div>
+                <div class="mb-2 mt-3 col">
+                    <select style="height:58px" asp-for="Watch.Gender" class="form-select" onchange="changeFuncFaceSize()">
+                        <option value="" selected>---Choses Gender---</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nu">Nữ</option>
+                    </select>
+                    <span asp-validation-for="Watch.Gender" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-between">
+                <div class="form-floating mb-2 mt-3 me-2 w-50 ">
+                    <input asp-for="Watch.GlassType" id="GlassTypeInput" class="form-control" placeholder="">
+                    <label>Glass Type</label>
+                    <span class="text-danger"></span>
+                    <div class="mt-1">
+                        <select asp-for="Watch.GlassType" asp-items="Model.GlassTypeSL" id="GlassTypeSelectBox" class="form-select" size="@Model.GlassTypeSL.Count()" aria-label="size 3 select example" onchange="changeFuncGlassType()">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Watch.GlassType" class="text-danger"></span>
+                </div>
+                <img class="mt-3" height="140px" src="https://benhviendongho.vn/wp-content/uploads/2021/01/Cac-loai-kinh-dong-ho-pho-bien_2.jpg" />
+            </div>
+
+            <div class="d-flex flex-row justify-content-between">
+                <div class="form-floating mb-2 mt-3 me-2 w-50">
+                    <input asp-for="Watch.MachineType" id="MachineTypeInput" class="form-control" placeholder="">
+                    <label>Machine Type</label>
+                    <span class="text-danger"></span>
+                    <div class="mt-1">
+                        <select asp-for="Watch.MachineType" asp-items="Model.MachineTypeSL" id="MachineTypeSelectBox" class="form-select" size="@Model.MachineTypeSL.Count()" aria-label="size 3 select example" onchange="changeFuncMachineType()">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Watch.MachineType" class="text-danger"></span>
+                </div>
+                <img class="mt-3" width="250px" height="140px" src="https://lh4.googleusercontent.com/proxy/pxhF9-hQsF33UT6WNIv6Vb3KbhRPUI89EG7GqmCcPPQwNp7QUTDYHQTOsv2L1MmCFaJnTP7K9cNQsh3QXzt52h7U1bA" />
+            </div>
+
+
+            <div class="d-flex flex-row justify-content-between">
+                <div class="form-floating mb-2 mt-3 me-2 w-50">
+                    <input asp-for="Watch.WireMaterial" id="WireMaterialInput" class="form-control" placeholder="">
+                    <label>Wire Materiale</label>
+                    <span class="text-danger"></span>
+                    <div class="mt-1">
+                        <select asp-for="Watch.WireMaterial" asp-items="Model.WireMaterialSL" id="WireMaterialSelectBox" class="form-select" size="@Model.WireMaterialSL.Count()" aria-label="size 3 select example" onchange="changeFuncWireMaterial()">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Watch.WireMaterial" class="text-danger"></span>
+                </div>
+                <img class="mt-3" width="250px" height="140px" src="https://thumuadonghohieu.com/wp-content/uploads/2022/04/Day-dong-ho.jpg" />
+            </div>
+
+            <div class="d-flex flex-row justify-content-between">
+                <div class="form-floating mb-2 mt-3 me-2 w-50">
+                    <input asp-for="Watch.WaterResistant" id="WaterResistantInput" class="form-control" placeholder="">
+                    <label>Water Resistant</label>
+                    <span class="text-danger"></span>
+                    <div class="mt-1">
+                        <select asp-for="Watch.WaterResistant" asp-items="Model.WaterResistantSL" id="WaterResistantSelectBox" class="form-select" size="@Model.WaterResistantSL.Count()" aria-label="size 3 select example" onchange="changeFuncWaterResistant()">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Watch.WaterResistant" class="text-danger"></span>
+                </div>
+                <img class="mt-3" width="250px" height="140px" src="https://cdn.tgdd.vn/Files/2021/11/20/1399243/dong-ho-dien-tu-chong-nuoc-la-gi-cac-dac-diem-noi-14.jpg" />
+            </div>
+
+            <div class="d-flex flex-row justify-content-between">
+                <div class="form-floating mb-2 mt-3 me-2 w-50">
+                    <input asp-for="Watch.FaceSize" id="FaceSizeInput" class="form-control" placeholder="">
+                    <label>Face Size</label>
+                    <span class="text-danger"></span>
+                    <div class="mt-1">
+                        <select asp-for="Watch.FaceSize" asp-items="Model.FaceSizeSL" id="FaceSizeSelectBox" class="form-select" size="@Model.FaceSizeSL.Count()" aria-label="size 3 select example" onchange="changeFuncFaceSize()">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Watch.FaceSize" class="text-danger"></span>
+                </div>
+                <img class="mt-3" width="250px" height="140px" src="https://cdn.tgdd.vn/Files/2019/07/09/1178483/duongkinhvodongho.jpg" />
+            </div>
+
+            <div class="d-flex flex-row justify-content-between align-items-center mt-2">
+                <div>
+                    <a asp-page="Index"> <-- Back to List</a>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    // GlassType
+    function changeFuncGlassType() {
+        var selectBox = document.getElementById("GlassTypeSelectBox");
+        var CategoryInput = document.getElementById("GlassTypeInput");
+
+        var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+        CategoryInput.value = selectedValue;
+    }
+
+    document.getElementById('GlassTypeInput').addEventListener('focus', function () {
+        var selectBox = document.getElementById("GlassTypeSelectBox");
+        selectBox.value = "selected";
+        document.getElementById("GlassTypeInput").value = "";
+        document.getElementById("GlassTypeInput").setAttribute('maxlength', 50);
+    });
+
+
+
+
+    // Machine Type
+    function changeFuncMachineType() {
+        var selectBox = document.getElementById("MachineTypeSelectBox");
+        var MachineTypeInput = document.getElementById("MachineTypeInput");
+
+        var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+        MachineTypeInput.value = selectedValue;
+    }
+
+    document.getElementById('MachineTypeInput').addEventListener('focus', function () {
+        var selectBox = document.getElementById("MachineTypeSelectBox");
+        selectBox.value = "selected";
+        document.getElementById("MachineTypeInput").value = "";
+        document.getElementById("MachineTypeInput").setAttribute('maxlength', 50);
+    });
+
+
+
+    // WireMaterial Input
+    function changeFuncWireMaterial() {
+        var selectBox = document.getElementById("WireMaterialSelectBox");
+        var CategoryInput = document.getElementById("WireMaterialInput");
+
+        var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+        CategoryInput.value = selectedValue;
+    }
+
+    document.getElementById('WireMaterialInput').addEventListener('focus', function () {
+        var selectBox = document.getElementById("WireMaterialSelectBox");
+        selectBox.value = "selected";
+        document.getElementById("WireMaterialInput").value = "";
+        document.getElementById("WireMaterialInput").setAttribute('maxlength', 50);
+    });
+
+
+
+    // WireMaterial Input
+    function changeFuncWaterResistant() {
+        var selectBox = document.getElementById("WaterResistantSelectBox");
+        var CategoryInput = document.getElementById("WaterResistantInput");
+
+        var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+        CategoryInput.value = selectedValue;
+    }
+
+    document.getElementById('WaterResistantInput').addEventListener('focus', function () {
+        var selectBox = document.getElementById("WaterResistantSelectBox");
+        selectBox.value = "selected";
+        document.getElementById("WaterResistantInput").value = "";
+        document.getElementById("WaterResistantInput").setAttribute('maxlength', 50);
+    });
+
+
+
+    // Face Size
+    function changeFuncFaceSize() {
+        var selectBox = document.getElementById("FaceSizeSelectBox");
+        var CategoryInput = document.getElementById("FaceSizeInput");
+
+        var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+        CategoryInput.value = selectedValue;
+    }
+
+    document.getElementById('FaceSizeInput').addEventListener('focus', function () {
+        var selectBox = document.getElementById("FaceSizeSelectBox");
+        selectBox.value = "selected";
+        document.getElementById("FaceSizeInput").value = "";
+        document.getElementById("FaceSizeInput").setAttribute('maxlength', 50);
+    });
+
+</script>
